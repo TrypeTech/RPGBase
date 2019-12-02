@@ -2056,9 +2056,9 @@ MonoBehaviour:
   ActorToAttackPannel: {fileID: 1400337914}
   AttackOptionPannel: {fileID: 1578659884}
   EnemyChoiceButtons:
+  - {fileID: 692387423}
   - {fileID: 1116432722}
   - {fileID: 254749865}
-  - {fileID: 692387423}
   state: 0
   PlayerTurns: 0
   CurrentPlayerTurn: 0

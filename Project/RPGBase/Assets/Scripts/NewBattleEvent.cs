@@ -123,7 +123,7 @@ public class NewBattleEvent : MonoBehaviour {
         EnemyTurns = 0;
         currentEnemyTurn = 0;
         CurrentPlayerTurn = 0;
-
+       
         // add how many player that are there and are still alive
         for (int i = 0; i < ActorPrefabs.Count; i++)
         {
@@ -180,7 +180,8 @@ public class NewBattleEvent : MonoBehaviour {
     // fill the buttons and pannels with the current players information
     public void SetPlayerChoices(GameObject Actor)
     {
-        SetEnemyAttackChoises(Actor, PlayerActors[CurrentPlayerTurn].gameObject.GetComponent<TempActor>().damage);
+       // int playerAttackDamage = PlayerActors[CurrentPlayerTurn].gameObject.GetComponent<TempActor>().damage;
+        SetEnemyAttackChoises(Actor, 20);
     }
 
 
@@ -192,26 +193,24 @@ public class NewBattleEvent : MonoBehaviour {
         ActorToAttackPannel.gameObject.SetActive(true);
         BattleOptionPannel.gameObject.SetActive(false);
 
-        List<GameObject> enemyActors = new List<GameObject>();
-        for (int i = 0; i < ActorPrefabs.Count; i++)
+        for (int i = 0; i < EnemyActors.Count; i++)
         {
-            //  EnemyChoiceButtons[i].gameObject.GetComponentInChildren<Text>().text = PlayerSkills[i].Name + " " + PlayerSkills[i].Count.ToString() + ":AM";
-            //  add function to button when selected
-            //  int itemNumber = PlayerSkills[i].ID;
-            //  SkillOptionsSlots[i].GetComponentInChildren<Button>().onClick.AddListener(() => DoSkillAttack(itemNumber));
-            //  set the function for seting the player attack
-            //  remove all functions on buttons
-            if (ActorPrefabs[i].gameObject.GetComponent<TempActor>().actor == TempActor.ActorType.Enemy)
+            if (i > EnemyChoiceButtons.Count)
             {
-                enemyActors.Add(ActorPrefabs[i].gameObject);
+                EnemyChoiceButtons[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                EnemyChoiceButtons[i].GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+                //  EnemyChoiceButtons[i].GetComponentInChildren<Button>().onClick.AddListener(() => StartCoroutine(AttackEnemy(ActorPrefabs[i], Damage)));
+                GameObject enemyActor = EnemyActors[i].gameObject;
+                int damage = Damage;
+                EnemyChoiceButtons[i].GetComponentInChildren<Button>().onClick.AddListener(() => SetActorsAttackOrder(player, enemyActor, damage));
+                Debug.Log("attach choice in");
             }
         }
-        for (int i = 0; i < enemyActors.Count; i++)
-        {
-            EnemyChoiceButtons[i].GetComponentInChildren<Button>().onClick.RemoveAllListeners();
-            //  EnemyChoiceButtons[i].GetComponentInChildren<Button>().onClick.AddListener(() => StartCoroutine(AttackEnemy(ActorPrefabs[i], Damage)));
-            EnemyChoiceButtons[i].GetComponentInChildren<Button>().onClick.AddListener(() => SetActorsAttackOrder(player, ActorPrefabs[i], Damage));
-        }
+
+        Debug.Log("Attack Choice out");
     }
 
 
@@ -319,9 +318,9 @@ public class NewBattleEvent : MonoBehaviour {
     {
         //  ActorToAttackPannel.gameObject.SetActive(false);
 
+        Debug.Log("In set actor attack order");
 
-        
-        if (currentEnemyTurn >= EnemyTurns - 1)
+        if (currentEnemyTurn == EnemyTurns -1 )
         {
             // Do battle Calculations
            StartCoroutine(DoBattleDamageCalculations());
@@ -336,7 +335,7 @@ public class NewBattleEvent : MonoBehaviour {
 
             StartCoroutine( EnemyTurn());
             ActorToAttackPannel.gameObject.SetActive(false);
-           // Debug.Log("Enemy turn");
+            Debug.Log("Enemy turn");
         }
         
         else
@@ -344,7 +343,7 @@ public class NewBattleEvent : MonoBehaviour {
             int ActorSpeed = attacking.gameObject.GetComponent<TempActor>().speed;
             AttackOrderList.Add(new ActorAttack(attacking, target, Damage, ActorSpeed));
             PlayerTurn();
-          //  Debug.Log("A Players Turn");
+            Debug.Log("A Players Turn");
         }
        
     }
@@ -408,7 +407,7 @@ public class NewBattleEvent : MonoBehaviour {
         Debug.Log(Target.name + " Target Name: " + Target.GetComponent<TempActor>().currentHP);
         bool isDead = Target.GetComponent<TempActor>().TakeDamage(Damage);
         // undo this do batle calculations
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0f);
         if (isDead)
         {
 
@@ -435,7 +434,7 @@ public class NewBattleEvent : MonoBehaviour {
                 Debug.Log("Player Has Won");
                 
             }
-
+            
             dialogueText.text = Target.name + " Has Died";
 
             

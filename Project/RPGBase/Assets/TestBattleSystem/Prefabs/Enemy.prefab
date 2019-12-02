@@ -586,7 +586,7 @@ MonoBehaviour:
   unitName: MONSTER
   unitLevel: 5
   damage: 22
-  maxHP: 30
+  maxHP: 10
   currentHP: 30
   speed: 0
   actor: 1
