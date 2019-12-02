@@ -31,15 +31,15 @@ public class PlayerController : MonoBehaviour
  
     Animator animator;
     Transform cameraT;
-  
-    
+
+    public bool canMove;
 
     public CharacterController controller;
     // AnimationController AnimController;
 
     void Start()
     {
-
+        canMove = true;
         extraJumps = extraJumpValue;
         //  AnimController.GetComponent<AnimationController>();
         //  animator = GetComponentInChildren<Animator>();
@@ -53,7 +53,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        
+
+        if (canMove == false)
+            return;
+
         if (controller.isGrounded == true)
         {
             extraJumps = extraJumpValue;
@@ -124,7 +127,7 @@ public class PlayerController : MonoBehaviour
             // NOTE check if .. lag remove and set a wait in animation to time stop jumping
             // AnimController.StopJumpingAnimation();
             animator.SetBool("Jumping", false);
-            animator.SetBool("JumpFall", false);
+           // animator.SetBool("JumpFall", false);
         }
 
     }
@@ -140,7 +143,7 @@ public class PlayerController : MonoBehaviour
             velocityY = jumpVelocity;
             Debug.Log("HitJumpbutton");
             animator.SetBool("Jumping", true);
-            Invoke("JumpFall", JumpFallWaitTime);
+           // Invoke("JumpFall", JumpFallWaitTime);
        }
     }
 

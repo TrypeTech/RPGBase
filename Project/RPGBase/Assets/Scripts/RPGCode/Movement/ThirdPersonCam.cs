@@ -15,12 +15,19 @@ public class ThirdPersonCam : MonoBehaviour
     public float rotationSmoothTime = 0.12f;
     Vector3 rotationSmoothVelocity;
     Vector3 currentRotation;
-
+    public bool canMove;
     float yaw;
     float pitch;
 
+    public void Start()
+    {
+        canMove = true;
+    }
     private void LateUpdate()
     {
+        if (canMove == false)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Y) && EnableFirstCamPosition == true)
         {
             EnableFirstCamPosition = false;
